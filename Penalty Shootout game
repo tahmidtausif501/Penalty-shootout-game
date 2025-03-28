@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penalty Shootout Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Penalty Shootout</h1>
+    <canvas id="gameCanvas" width="480" height="800"></canvas>
+    <script src="script.js"></script>
+</body>
+</html>body {
+    font-family: Arial, sans-serif;
+    background-color: #333;
+    color: white;
+    text-align: center;
+}
+
+#gameCanvas {
+    border: 2px solid white;
+}// Basic game setup
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+// Game variables
+const ball = { x: 240, y: 700, radius: 20, color: 'white' };
+const goalkeeper = { x: 220, y: 100, width: 40, height: 60, color: 'black' };
+
+// Function to draw the ball and goalkeeper
+function drawGame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Draw goal
+    ctx.strokeStyle = 'white';
+    ctx.strokeRect(50, 50, 380, 100);
+    
+    // Draw the ball
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+    ctx.fillStyle = ball.color;
+    ctx.fill();
+    ctx.closePath();
+    
+    // Draw the goalkeeper
+    ctx.fillStyle = goalkeeper.color;
+    ctx.fillRect(goalkeeper.x, goalkeeper.y, goalkeeper.width, goalkeeper.height);
+}
+
+// Function to handle the ball movement
+function moveBall(event) {
+    // Adjust ball position based on mouse or touch event
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    
+    ball.x = mouseX;
+    ball.y = mouseY;
+}
+
+// Event listeners for touch or mouse input
+canvas.addEventListener("mousemove", moveBall);
+canvas.addEventListener("touchmove", (e) => {
+    moveBall(e.touches[0]);
+});
+
+// Game loop
+function gameLoop() {
+    drawGame();
+    requestAnimationFrame(gameLoop);
+}
+
+// Start the game loop
+gameLoop();
